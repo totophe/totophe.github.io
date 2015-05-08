@@ -1,0 +1,13 @@
+# Site settings
+title: Totophe
+email: cybertotophe@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  The incredible Totophe™ Universe
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://totophe.github.io" # the base hostname & protocol for your site
+twitter_username: totophe
+github_username:  totophe
+linkedin_username:  totophe
+
+# Build settings
+markdown: kramdown
