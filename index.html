@@ -1,23 +1,366 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Totophe — The Incredible Totophe™ Universe</title>
+  <meta name="description" content="Jean-Christophe Cuvelier (Totophe) — writing on building software, plus a few things I've made: Quill, You Think You Know, and more." />
 
-<div class="home">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Incredible Totophe™ Universe" />
+  <meta property="og:description" content="Writing, apps, and side projects by Jean-Christophe Cuvelier — Brussels, since 2003." />
+  <meta property="og:url" content="https://totophe.github.io/" />
+  <meta name="twitter:card" content="summary" />
 
-  <h1 class="page-heading">Posts</h1>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+  <style>
+    :root {
+      --c-surface: #ece1c7;
+      --c-raised: #e6dabd;
+      --c-hair: #d6c8aa;
+      --c-ink: #2c3a40;
+      --c-body: #33424a;
+      --c-dek: #4d5b61;
+      --c-muted: #55656c;
+      --c-accent: #d75f36;
+      --c-accent-strong: #b8500f;
+      --c-band: #2c3a40;
+      --c-band-ink: #ece1c7;
+      --c-band-body: #c8d3d6;
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
+      --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+      --font-sans: "Libre Franklin", Helvetica, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+      --measure: 46rem;
+    }
 
-</div>
+    :root[data-theme="dark"] {
+      --c-surface: #212b30;
+      --c-raised: #2e3b41;
+      --c-hair: #44545b;
+      --c-ink: #ece1c7;
+      --c-body: #c8d3d6;
+      --c-dek: #cdd7da;
+      --c-muted: #a3b5ba;
+      --c-accent: #ee7a4e;
+      --c-accent-strong: #ffa074;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root[data-theme="auto"] {
+        --c-surface: #212b30;
+        --c-raised: #2e3b41;
+        --c-hair: #44545b;
+        --c-ink: #ece1c7;
+        --c-body: #c8d3d6;
+        --c-dek: #cdd7da;
+        --c-muted: #a3b5ba;
+        --c-accent: #ee7a4e;
+        --c-accent-strong: #ffa074;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { color-scheme: light dark; }
+
+    body {
+      margin: 0;
+      background: var(--c-surface);
+      color: var(--c-body);
+      font-family: var(--font-sans);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    .wrap {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 5rem) 1.5rem 4rem;
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      margin: 0 0 1.1rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: clamp(2.25rem, 6vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      color: var(--c-ink);
+      margin: 0 0 1rem;
+    }
+
+    h1 .tm { color: var(--c-accent); }
+
+    .dek {
+      font-family: var(--font-serif);
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--c-dek);
+      max-width: 34rem;
+      margin: 0 0 .5rem;
+    }
+
+    .intro {
+      margin: 1.75rem 0 0;
+      max-width: 34rem;
+    }
+
+    .intro a { color: var(--c-accent-strong); }
+
+    a { color: var(--c-accent-strong); text-underline-offset: .18em; text-decoration-thickness: 1px; }
+    a:hover { color: var(--c-accent); }
+
+    .rule {
+      border: 0;
+      border-top: 1px solid var(--c-hair);
+      margin: 2.75rem 0;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      margin: 0 0 1.25rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 34rem) {
+      .cards { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      display: block;
+      position: relative;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hair);
+      border-radius: 10px;
+      padding: 1.35rem 1.4rem 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--c-accent);
+      box-shadow: 0 8px 22px -14px rgba(0,0,0,.5);
+    }
+
+    .card .tag {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      display: block;
+      margin-bottom: .55rem;
+    }
+
+    .card h3 {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: 1.4rem;
+      line-height: 1.15;
+      color: var(--c-ink);
+      margin: 0 0 .4rem;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: .95rem;
+      color: var(--c-body);
+    }
+
+    .card .arrow {
+      position: absolute;
+      top: 1.35rem;
+      right: 1.4rem;
+      color: var(--c-muted);
+      font-family: var(--font-mono);
+      transition: transform .16s ease, color .16s ease;
+    }
+    .card:hover .arrow { color: var(--c-accent); transform: translate(2px, -2px); }
+
+    /* Social */
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+    }
+
+    .social a {
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      text-decoration: none;
+      color: var(--c-body);
+      border: 1px solid var(--c-hair);
+      border-radius: 999px;
+      padding: .4rem .9rem;
+      transition: border-color .16s ease, color .16s ease, background-color .16s ease;
+    }
+    .social a:hover {
+      border-color: var(--c-accent);
+      color: var(--c-accent-strong);
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--c-hair);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer small {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .04em;
+      color: var(--c-muted);
+    }
+
+    .theme-seg {
+      display: inline-flex;
+      border: 1px solid var(--c-hair);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .theme-seg button {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      padding: .38rem .7rem;
+      transition: background-color .16s ease, color .16s ease;
+    }
+    .theme-seg button[aria-pressed="true"] {
+      background: var(--c-ink);
+      color: var(--c-surface);
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="kicker">Brussels · Since 2003</p>
+    <h1>The Incredible Totophe<span class="tm">™</span> Universe</h1>
+    <p class="dek">Notes on building software, and the organisations that build it.</p>
+    <p class="intro">
+      I'm Jean-Christophe Cuvelier — <strong>Totophe</strong>. I write, and I build small
+      tools I wish existed. Here's where to find all of it.
+    </p>
+
+    <hr class="rule" />
+
+    <p class="section-label">Writing &amp; Projects</p>
+    <div class="cards">
+      <a class="card" href="https://totophe.com">
+        <span class="arrow">↗</span>
+        <span class="tag">The Blog</span>
+        <h3>totophe.com</h3>
+        <p>Two decades of notes on building software and the organisations that build it.</p>
+      </a>
+
+      <a class="card" href="https://totophe.github.io/quill/">
+        <span class="arrow">↗</span>
+        <span class="tag">macOS App · New</span>
+        <h3>Quill</h3>
+        <p>Your notes, as plain Markdown files — no import, no database, no sync lock-in.</p>
+      </a>
+
+      <a class="card" href="https://ytyk.org">
+        <span class="arrow">↗</span>
+        <span class="tag">Learn</span>
+        <h3>You Think You Know</h3>
+        <p>Bite-sized challenges on the obscure edge cases of Python, JavaScript, Java &amp; SQL.</p>
+      </a>
+
+      <a class="card" href="https://github.com/totophe">
+        <span class="arrow">↗</span>
+        <span class="tag">Code</span>
+        <h3>GitHub</h3>
+        <p>Open source and experiments — the workshop behind the projects.</p>
+      </a>
+    </div>
+
+    <hr class="rule" />
+
+    <p class="section-label">Elsewhere</p>
+    <div class="social">
+      <a href="https://www.linkedin.com/in/totophe/">LinkedIn</a>
+      <a href="https://github.com/totophe">GitHub</a>
+      <a href="https://x.com/totophe">X / Twitter</a>
+      <a href="https://www.instagram.com/totophe/">Instagram</a>
+    </div>
+
+    <footer>
+      <small>© <span id="year">2026</span> Jean-Christophe Cuvelier</small>
+      <div class="theme-seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-value="light">Light</button>
+        <button type="button" data-theme-value="auto">Auto</button>
+        <button type="button" data-theme-value="dark">Dark</button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var KEY = "totophe-theme";
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      var current = stored || "auto";
+
+      function apply(v) {
+        root.setAttribute("data-theme", v);
+        var btns = document.querySelectorAll(".theme-seg button");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].setAttribute("aria-pressed", btns[i].dataset.themeValue === v ? "true" : "false");
+        }
+      }
+
+      apply(current);
+
+      document.querySelector(".theme-seg").addEventListener("click", function (e) {
+        var btn = e.target.closest("button");
+        if (!btn) return;
+        var v = btn.dataset.themeValue;
+        try { localStorage.setItem(KEY, v); } catch (e) {}
+        apply(v);
+      });
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
